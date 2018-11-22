@@ -158,6 +158,44 @@ layer {
   }
 }
 layer {
+  name: "layer_64_1_bn1"
+  type: "BatchNorm"
+  bottom: "layer_64_1_conv1"
+  top: "layer_64_1_conv1"
+  param {
+    lr_mult: 0.0
+  }
+  param {
+    lr_mult: 0.0
+  }
+  param {
+    lr_mult: 0.0
+  }
+}
+layer {
+  name: "layer_64_1_scale1"
+  type: "Scale"
+  bottom: "layer_64_1_conv1"
+  top: "layer_64_1_conv1"
+  param {
+    lr_mult: 1.0
+    decay_mult: 1.0
+  }
+  param {
+    lr_mult: 2.0
+    decay_mult: 1.0
+  }
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "layer_64_1_relu1"
+  type: "ReLU"
+  bottom: "layer_64_1_conv1"
+  top: "layer_64_1_conv1"
+}
+layer {
   name: "layer_64_1_conv2"
   type: "Convolution"
   bottom: "layer_64_1_conv1"
@@ -228,47 +266,9 @@ layer {
   top: "layer_64_1_sum"
 }
 layer {
-  name: "layer_128_1_bn1"
-  type: "BatchNorm"
-  bottom: "layer_64_1_sum"
-  top: "layer_128_1_bn1"
-  param {
-    lr_mult: 0.0
-  }
-  param {
-    lr_mult: 0.0
-  }
-  param {
-    lr_mult: 0.0
-  }
-}
-layer {
-  name: "layer_128_1_scale1"
-  type: "Scale"
-  bottom: "layer_128_1_bn1"
-  top: "layer_128_1_bn1"
-  param {
-    lr_mult: 1.0
-    decay_mult: 1.0
-  }
-  param {
-    lr_mult: 2.0
-    decay_mult: 1.0
-  }
-  scale_param {
-    bias_term: true
-  }
-}
-layer {
-  name: "layer_128_1_relu1"
-  type: "ReLU"
-  bottom: "layer_128_1_bn1"
-  top: "layer_128_1_bn1"
-}
-layer {
   name: "layer_128_2_conv1"
   type: "Convolution"
-  bottom: "layer_128_1_bn1"
+  bottom: "layer_64_1_sum"
   top: "layer_128_2_conv1"
   param {
     lr_mult: 1.0
@@ -288,6 +288,44 @@ layer {
       value: 0.0
     }
   }
+}
+layer {
+  name: "layer_128_2_bn1"
+  type: "BatchNorm"
+  bottom: "layer_128_2_conv1"
+  top: "layer_128_2_conv1"
+  param {
+    lr_mult: 0.0
+  }
+  param {
+    lr_mult: 0.0
+  }
+  param {
+    lr_mult: 0.0
+  }
+}
+layer {
+  name: "layer_128_2_scale1"
+  type: "Scale"
+  bottom: "layer_128_2_conv1"
+  top: "layer_128_2_conv1"
+  param {
+    lr_mult: 1.0
+    decay_mult: 1.0
+  }
+  param {
+    lr_mult: 2.0
+    decay_mult: 1.0
+  }
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "layer_128_2_relu1"
+  type: "ReLU"
+  bottom: "layer_128_2_conv1"
+  top: "layer_128_2_conv1"
 }
 layer {
   name: "layer_128_2_conv2"
@@ -354,7 +392,7 @@ layer {
 layer {
   name: "layer_128_1_conv_expand"
   type: "Convolution"
-  bottom: "layer_128_1_bn1"
+  bottom: "layer_64_1_sum"
   top: "layer_128_1_conv_expand"
   param {
     lr_mult: 1.0
@@ -421,47 +459,9 @@ layer {
   top: "layer_128_1_sum"
 }
 layer {
-  name: "layer_256_1_bn1"
-  type: "BatchNorm"
-  bottom: "layer_128_1_sum"
-  top: "layer_256_1_bn1"
-  param {
-    lr_mult: 0.0
-  }
-  param {
-    lr_mult: 0.0
-  }
-  param {
-    lr_mult: 0.0
-  }
-}
-layer {
-  name: "layer_256_1_scale1"
-  type: "Scale"
-  bottom: "layer_256_1_bn1"
-  top: "layer_256_1_bn1"
-  param {
-    lr_mult: 1.0
-    decay_mult: 1.0
-  }
-  param {
-    lr_mult: 2.0
-    decay_mult: 1.0
-  }
-  scale_param {
-    bias_term: true
-  }
-}
-layer {
-  name: "layer_256_1_relu1"
-  type: "ReLU"
-  bottom: "layer_256_1_bn1"
-  top: "layer_256_1_bn1"
-}
-layer {
   name: "layer_256_2_conv1"
   type: "Convolution"
-  bottom: "layer_256_1_bn1"
+  bottom: "layer_128_1_sum"
   top: "layer_256_2_conv1"
   param {
     lr_mult: 1.0
@@ -481,6 +481,44 @@ layer {
       value: 0.0
     }
   }
+}
+layer {
+  name: "layer_256_2_bn1"
+  type: "BatchNorm"
+  bottom: "layer_256_2_conv1"
+  top: "layer_256_2_conv1"
+  param {
+    lr_mult: 0.0
+  }
+  param {
+    lr_mult: 0.0
+  }
+  param {
+    lr_mult: 0.0
+  }
+}
+layer {
+  name: "layer_256_2_scale1"
+  type: "Scale"
+  bottom: "layer_256_2_conv1"
+  top: "layer_256_2_conv1"
+  param {
+    lr_mult: 1.0
+    decay_mult: 1.0
+  }
+  param {
+    lr_mult: 2.0
+    decay_mult: 1.0
+  }
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "layer_256_2_relu1"
+  type: "ReLU"
+  bottom: "layer_256_2_conv1"
+  top: "layer_256_2_conv1"
 }
 layer {
   name: "layer_256_2_conv2"
@@ -547,7 +585,7 @@ layer {
 layer {
   name: "layer_256_1_conv_expand"
   type: "Convolution"
-  bottom: "layer_256_1_bn1"
+  bottom: "layer_128_1_sum"
   top: "layer_256_1_conv_expand"
   param {
     lr_mult: 1.0
@@ -614,47 +652,9 @@ layer {
   top: "layer_256_1_sum"
 }
 layer {
-  name: "layer_512_1_bn1"
-  type: "BatchNorm"
-  bottom: "layer_256_1_sum"
-  top: "layer_512_1_bn1"
-  param {
-    lr_mult: 0.0
-  }
-  param {
-    lr_mult: 0.0
-  }
-  param {
-    lr_mult: 0.0
-  }
-}
-layer {
-  name: "layer_512_1_scale1"
-  type: "Scale"
-  bottom: "layer_512_1_bn1"
-  top: "layer_512_1_bn1"
-  param {
-    lr_mult: 1.0
-    decay_mult: 1.0
-  }
-  param {
-    lr_mult: 2.0
-    decay_mult: 1.0
-  }
-  scale_param {
-    bias_term: true
-  }
-}
-layer {
-  name: "layer_512_1_relu1"
-  type: "ReLU"
-  bottom: "layer_512_1_bn1"
-  top: "layer_512_1_bn1"
-}
-layer {
   name: "layer_512_2_conv1"
   type: "Convolution"
-  bottom: "layer_512_1_bn1"
+  bottom: "layer_256_1_sum"
   top: "layer_512_2_conv1"
   param {
     lr_mult: 1.0
@@ -674,6 +674,44 @@ layer {
       value: 0.0
     }
   }
+}
+layer {
+  name: "layer_512_2_bn1"
+  type: "BatchNorm"
+  bottom: "layer_512_2_conv1"
+  top: "layer_512_2_conv1"
+  param {
+    lr_mult: 0.0
+  }
+  param {
+    lr_mult: 0.0
+  }
+  param {
+    lr_mult: 0.0
+  }
+}
+layer {
+  name: "layer_512_2_scale1"
+  type: "Scale"
+  bottom: "layer_512_2_conv1"
+  top: "layer_512_2_conv1"
+  param {
+    lr_mult: 1.0
+    decay_mult: 1.0
+  }
+  param {
+    lr_mult: 2.0
+    decay_mult: 1.0
+  }
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "layer_512_2_relu1"
+  type: "ReLU"
+  bottom: "layer_512_2_conv1"
+  top: "layer_512_2_conv1"
 }
 layer {
   name: "layer_512_2_conv2"
@@ -740,7 +778,7 @@ layer {
 layer {
   name: "layer_512_1_conv_expand"
   type: "Convolution"
-  bottom: "layer_512_1_bn1"
+  bottom: "layer_256_1_sum"
   top: "layer_512_1_conv_expand"
   param {
     lr_mult: 1.0
@@ -804,44 +842,6 @@ layer {
   type: "Eltwise"
   bottom: "layer_512_2_conv2"
   bottom: "layer_512_1_conv_expand"
-  top: "layer_512_1_sum"
-}
-layer {
-  name: "last_bn"
-  type: "BatchNorm"
-  bottom: "layer_512_1_sum"
-  top: "layer_512_1_sum"
-  param {
-    lr_mult: 0.0
-  }
-  param {
-    lr_mult: 0.0
-  }
-  param {
-    lr_mult: 0.0
-  }
-}
-layer {
-  name: "last_scale"
-  type: "Scale"
-  bottom: "layer_512_1_sum"
-  top: "layer_512_1_sum"
-  param {
-    lr_mult: 1.0
-    decay_mult: 1.0
-  }
-  param {
-    lr_mult: 2.0
-    decay_mult: 1.0
-  }
-  scale_param {
-    bias_term: true
-  }
-}
-layer {
-  name: "last_relu"
-  type: "ReLU"
-  bottom: "layer_512_1_sum"
   top: "layer_512_1_sum"
 }
 layer {
