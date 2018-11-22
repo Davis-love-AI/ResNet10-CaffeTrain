@@ -1,4 +1,4 @@
-name: "ResNet10_mod_msceleb"
+name: "ResNet10_convadd_msceleb"
 input: "data"
 input_shape {
   dim: 1
