@@ -188,7 +188,9 @@ def main(args):
     total = 1100
     lfwParser = ParseLFW.ParseLFW(args.input_lfw_path)
     featuredot_match = np.zeros((total,1),np.float)
+    featuredist_match = np.zeros((total,1),np.float)
     featuredot_Unmatch = np.zeros((total,1),np.float)
+    featuredist_Unmatch = np.zeros((total,1),np.float)
     featuresL_match = []
     featuresL_Unmatch = []
     featuresR_match = []
@@ -209,6 +211,7 @@ def main(args):
         #print(featureL[0:3],featureR[0:3])
         featuresL_match.append(featureL)
         featuredot_match[i,0] = np.dot(featureL,featureR)/(np.linalg.norm(featureL)*np.linalg.norm(featureR))
+        featuredist_match[i,0] = np.linalg.norm(featureL - featureR)
         featuresR_match.append(featureR)
 
     #print("Feature Size, Data Type, Data Content\n")
@@ -217,6 +220,7 @@ def main(args):
     np.save(args.layer_name + "L_match",featuresL_match)
     np.save(args.layer_name + "R_match",featuresR_match)
     np.save(args.layer_name + "correlation_match",featuredot_match[0:total,0])
+    np.save(args.layer_name + "Distance_match", featuredist_match[0:total,0])
     print("Unmatched pairs:\n")
     for i in range(0,total):
         #[matchimgL, matchimgR] = lfwParser.MatchPair_extract()
@@ -232,11 +236,13 @@ def main(args):
         #print(featureL[0:3],featureR[0:3])
         featuresL_Unmatch.append(featureL)
         featuredot_Unmatch[i,0] = np.dot(featureL,featureR)/(np.linalg.norm(featureL)*np.linalg.norm(featureR))
+        featuredist_Unmatch[i,0] = np.linalg.norm(featureL - featureR)
         featuresR_Unmatch.append(featureR)
 
     np.save(args.layer_name + "L_Unmatch",featuresL_Unmatch)
     np.save(args.layer_name + "R_Unmatch",featuresR_Unmatch)
     np.save(args.layer_name + "correlation_Unmatch",featuredot_Unmatch[0:total,0])
+    np.save(args.layer_name + "Distance_Unmatch", featuredist_Unmatch[0:total,0])
     
     print("Correlations for matched pairs:",featuredot_match[0:total,0])
     print("Correlations for Unmatched pairs:",featuredot_Unmatch[0:total,0])
