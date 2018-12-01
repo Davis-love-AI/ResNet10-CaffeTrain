@@ -1,10 +1,29 @@
 name: "ResNet10_reluadd_halfinput_msceleb"
-input: "data"
-input_shape {
-  dim: 1
-  dim: 3
-  dim: 112
-  dim: 112
+layer {
+  name: "train_input_layer"
+  type: "Python"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  python_param {
+    module: "pythonLayer_hlfinpt"
+    layer: "train_input_layer"
+  }
+}
+layer {
+  name: "test_input_layer"
+  type: "Python"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  python_param {
+    module: "pythonLayer_hlfinpt"
+    layer: "test_input_layer"
+  }
 }
 layer {
   name: "data_bn"
@@ -853,9 +872,20 @@ layer {
   }
 }
 layer {
-  name: "prob"
-  type: "Softmax"
+  name: "loss"
+  type: "SoftmaxWithLoss"
   bottom: "score"
-  top: "prob"
+  bottom: "label"
+  top: "loss"
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "score"
+  bottom: "label"
+  top: "accuracy"
+  include {
+    phase: TEST
+  }
 }
 
