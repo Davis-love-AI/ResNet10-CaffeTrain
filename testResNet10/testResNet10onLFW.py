@@ -7,6 +7,8 @@ import pickle
 import struct
 import cv2
 
+import visdom
+
 import ParseLFW
 
 def set_gpu(gpuID):
@@ -163,6 +165,10 @@ def get_args():
         help="Order to permute input channels. The default converts " +
              "RGB -> BGR since BGR is the Caffe default by way of OpenCV."
     )
+    parser.add_argument(
+        "--draw_visdom",
+        action='store_true',
+        help="Indicating whether to draw test images on visdom server")
 
     return parser.parse_args()
 
@@ -196,6 +202,9 @@ def main(args):
     featuresR_match = []
     featuresR_Unmatch = []
     imgPair = []
+    crop_lb = 80#60
+    crop_ub = 210#190
+    viz = visdom.Visdom(port = 10141,env='LFW'+args.pretrained_model)
     print("Matched Pairs:")
     for i in range(0,total):
         [matchimgL, matchimgR] = lfwParser.MatchPair_extract()
@@ -204,6 +213,13 @@ def main(args):
         #matchimgL = cv2.cvtColor(matchimgL,cv2.COLOR_BGR2RGB)
         #matchimgR = cv2.imread("/root/modeltrans_shihl/face_ResNet/image179414.jpg")
         #matchimgR = cv2.cvtColor(matchimgR,cv2.COLOR_BGR2RGB)
+        if args.draw_visdom:
+            matchimgL = matchimgL[crop_lb:crop_ub,crop_lb:crop_ub,:]
+            matchL_RGB = matchimgL.transpose(2,0,1)
+            matchimgR = matchimgR[crop_lb-20:crop_ub-20,crop_lb-20:crop_ub-20,:]
+            matchR_RGB = matchimgR.transpose(2,0,1)
+            viz.image(matchL_RGB,win='MatchedPairs:L',opts=dict(title='MatchedPairs:L'))
+            viz.image(matchR_RGB,win='MatchedPairs:R',opts=dict(title='MatchedPairs:L'))
         imgPair = [matchimgL,matchimgR]
         features = extractor.extractFeatureFromMultiImage(imgPair, args.layer_name)
         featureL = features[0]
@@ -229,6 +245,13 @@ def main(args):
         #matchimgL = cv2.cvtColor(matchimgL,cv2.COLOR_BGR2RGB)
         #matchimgR = cv2.imread("/root/modeltrans_shihl/face_ResNet/image179414.jpg")
         #matchimgR = cv2.cvtColor(matchimgR,cv2.COLOR_BGR2RGB)
+        if args.draw_visdom:
+            UnmatchimgL = UnmatchimgL[crop_lb:crop_ub,crop_lb:crop_ub,:]
+            UnmatchL_RGB = UnmatchimgL.transpose(2,0,1)
+            UnmatchimgR = UnmatchimgR[crop_lb:crop_ub,crop_lb:crop_ub,:]
+            UnmatchR_RGB = UnmatchimgR.transpose(2,0,1)
+            viz.image(UnmatchL_RGB,win='UnMatchedPairs:L',opts=dict(title='UnMatchedPairs:L'))
+            viz.image(UnmatchR_RGB,win='UnMatchedPairs:R',opts=dict(title='UnMatchedPairs:R'))
         imgPair = [UnmatchimgL,UnmatchimgR]
         features = extractor.extractFeatureFromMultiImage(imgPair, args.layer_name)
         featureL = features[0]
@@ -246,8 +269,26 @@ def main(args):
     
     print("Correlations for matched pairs:",featuredot_match[0:total,0])
     print("Correlations for Unmatched pairs:",featuredot_Unmatch[0:total,0])
+    print("Distances for matched pairs:",featuredist_match[0:total,0])
+    print("Distances for Unmatched pairs:",featuredist_Unmatch[0:total,0])
     #print("Saved feature to file " + os.getcwd() + "/" + args.layer_name + ".npy")
     #print("Saved feature to file " + os.getcwd() + "/" + args.layer_name + ".npy")
+
+    cor_unmatch = featuredot_Unmatch[0:total,0]
+    cor_match = featuredot_match[0:total,0]
+
+    dis_unmatch = featuredist_Unmatch[0:total,0]
+    dis_match = featuredist_match[0:total,0]
+
+    threshold = np.arange(np.min(dis_match),np.max(dis_unmatch),0.001)
+    counts_d = np.zeros(len(threshold))
+    counts_fa = np.zeros(len(threshold))
+    for idx in range(0,len(threshold)):
+        count_d = len((np.where(dis_match<threshold[idx]))[0])
+        count_fa = len((np.where(dis_unmatch<threshold[idx]))[0])
+        counts_d[idx] = np.copy(count_d)
+        counts_fa[idx] = np.copy(count_fa)
+    viz.line(X=counts_fa/total,Y=counts_d/total,win='ROC Curve',opts=dict(title='ROC Curve',xlabel='P_fa',ylabel='P_d'))
 
 
 if __name__ == "__main__":

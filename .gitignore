@@ -1,3 +1,4 @@
 .
 *.caffemodel
 train_ResNet10\*.caffemodel
+core*
