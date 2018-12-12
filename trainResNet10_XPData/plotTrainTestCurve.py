@@ -19,10 +19,10 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-    
+
 if __name__ == '__main__':
     args = parse_args()
-    viz = visdom.Visdom(port=10141,env=("Parsed caffe training and testing result from "+ args.filename))
+    viz = visdom.Visdom(port=10031,env=("Parsed caffe training and testing result from "+ args.filename))
     filename = args.filename
     restr_base_lr = r'base_lr: ([0-9].[0-9]+)'
     restr_weight_decay = r'weight_decay: ([0-9].[0-9]+)'
@@ -64,6 +64,7 @@ if __name__ == '__main__':
         line += 1
     #print(filecontent)
     fid.close()
+    iteration_epoch = 17910
     #print(re.match(r'Train','Train net output'))
     test_len = np.min((len(Test_accu),len(Test_iter),len(Test_loss)))
     #plt.figure(1)
@@ -74,7 +75,7 @@ if __name__ == '__main__':
     #plt.xlabel('Epoches')
     #plt.ylabel('Test Loss')
     #plt.grid()
-    viz.line(X=Test_iter[0:test_len]/15563,Y=Test_loss[0:test_len],win='Test Loss',opts=dict(title=('Test Loss,\n base_lr:'+str(base_lr)+'weight_decay:'+str(weight_decay))))
+    viz.line(X=Test_iter[0:test_len]/iteration_epoch, Y=Test_loss[0:test_len],win='Test Loss',opts=dict(title=('Test Loss,\n base_lr:'+str(base_lr)+'weight_decay:'+str(weight_decay))))
     #viz.matplot(plt)
     #plt.subplot(212)
     #plt.plot(Train_iter[0:train_len]/15563,Train_loss[0:train_len],'-')
@@ -82,7 +83,7 @@ if __name__ == '__main__':
     #plt.ylabel('Train Loss')
     #plt.grid()
     #viz.matplot(plt)
-    viz.line(X=Train_iter[0:train_len]/15563,Y=Train_loss[0:train_len],win='Train Loss',opts=dict(title=('Train Loss, base_lr:'+str(base_lr)+'weight_decay:'+str(weight_decay))))
+    viz.line(X=Train_iter[0:train_len]/iteration_epoch, Y=Train_loss[0:train_len],win='Train Loss',opts=dict(title=('Train Loss, base_lr:'+str(base_lr)+'weight_decay:'+str(weight_decay))))
     #viz.matplot(plt)
     #plt.figure(2)
     #plt.plot(Test_iter[0:test_len]/15563,Test_accu[0:test_len])
@@ -90,6 +91,6 @@ if __name__ == '__main__':
     #plt.ylabel('Test Accuracy')
     #plt.grid()
     #viz.matplot(plt)
-    viz.line(X=Test_iter[0:test_len]/15563,Y=Test_accu[0:test_len],win='Test Accuracy',opts=dict(title=('Test Accuracy, base_lr:'+str(base_lr)+'weight_decay:'+str(weight_decay))))
+    viz.line(X=Test_iter[0:test_len]/iteration_epoch, Y=Test_accu[0:test_len],win='Test Accuracy',opts=dict(title=('Test Accuracy, base_lr:'+str(base_lr)+'weight_decay:'+str(weight_decay))))
     #viz.matplot(plt)
     #plt.show()

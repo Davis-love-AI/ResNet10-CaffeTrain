@@ -1,15 +1,15 @@
 test_iter: 10000		#test batch_size is 10, total test sample number is (counted from tsv file) around 100000, therefore test_iter should be more than 10000 
-test_interval: 15563	#train batch_size is 32, total train sample number is 498013, therefore more than 498013/32 iterations needed for one train epoch, we run a test every 1 epoches
+test_interval: 17910	#train batch_size is 32, total train sample number is 573075, therefore more than 573075/32 iterations needed for one train epoch, we run a test every 1 epoches
 base_lr: 0.01
 display: 20
-max_iter: 467000	#train batch_size is 32, total train sample number is 498013, more than 498013/32 iterations needed for one train epoch, we train at least 30 epoches in total
+max_iter: 537260	#train batch_size is 32, total train sample number is 573075, more than 573075/32 iterations needed for one train epoch, we train at least 30 epoches in total
 lr_policy: "step"
 gamma: 0.1
-stepsize: 155630	#train batch_size is 32, total train sample number is 498013, more than 498013/32 iterations needed for one train epoch, the learning rate is updated every 10 epoches
+stepsize: 179100	#train batch_size is 32, total train sample number is 573075, more than 573075/32 iterations needed for one train epoch, the learning rate is updated every 10 epoches
 momentum: 0.9
 weight_decay: 0.0001
 snapshot: 30000
-snapshot_prefix: "resnet10_msceleb_reluadd1122"
+snapshot_prefix: "resnet10_msceleb_reluadd1208"
 random_seed: 0
 net: "ResNet10train_reluadd.prototxt"
 test_initialization: false

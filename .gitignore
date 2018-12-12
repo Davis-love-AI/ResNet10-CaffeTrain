@@ -1,4 +1,15 @@
 .
 *.caffemodel
+*.solverstate
+*.npy
+*.log
+*.txt
+*\*.txt
+*\*.log
 train_ResNet10\*.caffemodel
+train_ResNet10\*.solverstate
+train_ResNet10\*.npy
 core*
+train_ResNet10_XPData\*.caffemodel
+train_ResNet10_XPData\*.solverstate
+train_ResNet10_XPData\*.npy
